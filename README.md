@@ -12,3 +12,9 @@ wu_program
 这里需要注意的是：
 注意每个文件的输入命令
  `test args: `
+
+# 2018.10.11
+学习了2个TS算例，对TS Object有一个大体的了解。  
+上传了一个小程序，可以支持Matrix-Free以及Field Split PC  
+在我的理解中就是JFNK方法再加上块Jacobi预处理  
+可以借鉴该算例，修改耦合计算程序

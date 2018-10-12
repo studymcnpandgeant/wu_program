@@ -18,3 +18,11 @@ wu_program
 上传了一个小程序，可以支持Matrix-Free以及Field Split PC  
 在我的理解中就是JFNK方法再加上块Jacobi预处理  
 可以借鉴该算例，修改耦合计算程序
+
+
+# 2018.10.12
+多文件C++程序处理
+目前效果不是很好，仅能实现把部分程序放入一个头文件中。
+可以参考  
+[Multifiles](http://www.itkeyword.com/doc/5923142964970566764/creating-a-library-file-in-makefile-and-compiling-after-that)  
+上述文档中说明了，如何把以及编译好的库文件链接到PETSc文件中。

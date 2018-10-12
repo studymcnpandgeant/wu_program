@@ -25,4 +25,5 @@ wu_program
 目前效果不是很好，仅能实现把部分程序放入一个头文件中。  
 可以参考  
 [Multifiles](http://www.itkeyword.com/doc/5923142964970566764/creating-a-library-file-in-makefile-and-compiling-after-that)  
-上述文档中说明了，如何把以及编译好的库文件链接到PETSc文件中。
+上述文档中说明了，如何把以及编译好的库文件链接到PETSc文件中。  
+现在的问题是如何把自己的类或者函数封装为库文件，尤其是含有某些PETSc对象的函数，如何生成.o并生成lib？

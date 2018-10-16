@@ -44,11 +44,9 @@ wu_program
 2165: {
 2167:   PetscInt       i,N;
 2168:   PetscScalar    *aa;
-
 2174:   VecGetLocalSize(x,&N);
 2175:   if (m*n != N) SETERRQ3(PETSC_COMM_SELF,PETSC_ERR_ARG_INCOMP,"Local array size %D does not match 2d array dimensions %D by %D",N,m,n);
 2176:   VecGetArray(x,&aa);
-
 2178:   PetscMalloc1(m,a);
 2179:   for (i=0; i<m; i++) (*a)[i] = aa + i*n - nstart;
 2180:   *a -= mstart;

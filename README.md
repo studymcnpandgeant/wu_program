@@ -27,3 +27,9 @@ wu_program
 [Multifiles](http://www.itkeyword.com/doc/5923142964970566764/creating-a-library-file-in-makefile-and-compiling-after-that)  
 上述文档中说明了，如何把以及编译好的库文件链接到PETSc文件中。  
 现在的问题是如何把自己的类或者函数封装为库文件，尤其是含有某些PETSc对象的函数，如何生成.o并生成lib？
+
+
+# 2018.10.16
+中子部分并行程序的修改，主要体现在以下不同：  
+* keff变成一个物理场，但是由于这个物理场残差函数是每个网格都相同的，所以可以保证是一个均匀的物理场。
+* 把FormFuntion变成区域计算，在每个处理器上只计算属于该处理器上的内容，这有可能涉及到映射点的问题。

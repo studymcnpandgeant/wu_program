@@ -33,3 +33,4 @@ wu_program
 中子部分并行程序的修改，主要体现在以下不同：  
 * keff变成一个物理场，但是由于这个物理场残差函数是每个网格都相同的，所以可以保证是一个均匀的物理场。
 * 把FormFuntion变成区域计算，在每个处理器上只计算属于该处理器上的内容，这有可能涉及到映射点的问题。
+* 程序中使用了DMCompositeScatter来获取局部向量，但是官方建议是使用`DMGlobalToLocal()` and `DMLocalToGlobal()` 来获得映射点。

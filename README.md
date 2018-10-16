@@ -41,7 +41,9 @@ wu_program
 # 2018.10.17
 对指针的理解：  
 `2164: PetscErrorCode  VecGetArray2d(Vec x,PetscInt m,PetscInt n,PetscInt mstart,PetscInt nstart,PetscScalar **a[])  
+
 2165: {  
+
 2167:   PetscInt       i,N;  
 2168:   PetscScalar    *aa;  
 2174:   VecGetLocalSize(x,&N);  

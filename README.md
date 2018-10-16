@@ -35,3 +35,22 @@ wu_program
 * 把FormFuntion变成区域计算，在每个处理器上只计算属于该处理器上的内容，这有可能涉及到映射点的问题。
 * 程序中使用了DMCompositeScatter来获取局部向量，但是官方建议是使用`DMGlobalToLocal()` and `DMLocalToGlobal()` 来获得映射点。
 * 有一个致命的问题：在计算keff的时候需要每个网格的信息，这是仅靠映射点以及不够了，应该如何处理？
+
+
+
+# 2018.10.17
+对指针的理解：  
+`2164: PetscErrorCode  VecGetArray2d(Vec x,PetscInt m,PetscInt n,PetscInt mstart,PetscInt nstart,PetscScalar **a[])
+2165: {
+2167:   PetscInt       i,N;
+2168:   PetscScalar    *aa;
+
+2174:   VecGetLocalSize(x,&N);
+2175:   if (m*n != N) SETERRQ3(PETSC_COMM_SELF,PETSC_ERR_ARG_INCOMP,"Local array size %D does not match 2d array dimensions %D by %D",N,m,n);
+2176:   VecGetArray(x,&aa);
+
+2178:   PetscMalloc1(m,a);
+2179:   for (i=0; i<m; i++) (*a)[i] = aa + i*n - nstart;
+2180:   *a -= mstart;
+2181:   return(0);
+2182: }`

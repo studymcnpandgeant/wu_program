@@ -27,3 +27,30 @@ wu_program
 [Multifiles](http://www.itkeyword.com/doc/5923142964970566764/creating-a-library-file-in-makefile-and-compiling-after-that)  
 上述文档中说明了，如何把以及编译好的库文件链接到PETSc文件中。  
 现在的问题是如何把自己的类或者函数封装为库文件，尤其是含有某些PETSc对象的函数，如何生成.o并生成lib？
+
+
+# 2018.10.16
+中子部分并行程序的修改，主要体现在以下不同：  
+* keff变成一个物理场，但是由于这个物理场残差函数是每个网格都相同的，所以可以保证是一个均匀的物理场。
+* 把FormFuntion变成区域计算，在每个处理器上只计算属于该处理器上的内容，这有可能涉及到映射点的问题。
+* 程序中使用了DMCompositeScatter来获取局部向量，但是官方建议是使用`DMGlobalToLocal()` and `DMLocalToGlobal()` 来获得映射点。
+* 有一个致命的问题：在计算keff的时候需要每个网格的信息，这是仅靠映射点以及不够了，应该如何处理？
+
+
+
+# 2018.10.17
+对指针的理解：  
+`2164: PetscErrorCode  VecGetArray2d(Vec x,PetscInt m,PetscInt n,PetscInt mstart,PetscInt nstart,PetscScalar **a[])`  
+`2165: { `   
+`2167:   PetscInt       i,N;`      
+`2168:   PetscScalar    *aa;`   
+`2174:   VecGetLocalSize(x,&N);`  
+`2175:   if (m*n != N) SETERRQ3(PETSC_COMM_SELF,PETSC_ERR_ARG_INCOMP,"Local array size %D does not match 2d array dimensions %D by %D",N,m,n);  `  
+`2176:   VecGetArray(x,&aa); `   
+`2178:   PetscMalloc1(m,a);`    
+`2179:   for (i=0; i<m; i++) (*a)[i] = aa + i*n - nstart; `   
+`2180:   *a -= mstart;`    
+`2181:   return(0); `   
+`2182: }`  
+这里的`**a[]`应该指向一个二维数组，从声明上可以看出这是一个数组，每个元素是指针的指针，从函数里可以看出这个数组维度是m。  
+`2179`行表示的是，对每个指针的起始位置的地址赋予初值。  

@@ -62,9 +62,9 @@ wu_program
 2.1  指针名表示地址，`*`运算符被称为间接值或者解除引用算符。  
 2.2  `int* ptr`强调指向Int的一个值，该值的地址为ptr。  
 2.3  使用`new`来分配内存  
-在运行阶段分配未命名的内存以存储值  
-`typeName* pointer_name = new typeName`  
-eg.`int* pt = new int`  
+  在运行阶段分配未命名的内存以存储值  
+  `typeName* pointer_name = new typeName`  
+  eg.`int* pt = new int`  
    `*pt = 1000`  
    先分配了内存地址，再使用该内存地址的指针指向一个数据。  
  2.4  指针数组运算符  

@@ -70,4 +70,5 @@ eg.`int* pt = new int`
  2.4  指针数组运算符  
  `arrayname[i]  becomes *(arrayname + i)`  
  2.5  如果结构标识符是结构名，则使用句点运算符；如果标识符是指向结构的指针，则使用箭头标识符。  
- 
+3. 反思算例/snes/ex28.c  
+

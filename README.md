@@ -74,4 +74,6 @@ eg.`int* pt = new int`
 程序中最初定义了一个指向结构体UserCtx的指针`typedef struct _UserCtx* User`  
 这里定义了一个指向结构体的指针类型，这个类型之后在主函数中声明  
 `User user`这里的user是一个指针（地址），这个指针指向结构体_UserCtx  
-指针定义了，但是需要对这个指针初始化，使它指向一个实际的结构体 ** allocate space for struct **  
+指针定义了，但是需要对这个指针初始化，使它指向一个实际的结构体 **allocate space for struct**  
+`PetscNew(&user)`作用类似于new，给user这个地址分配一个内存空间。  
+由于user这里是地址（指针），所以使用结构体内变量使用箭头标识符。  

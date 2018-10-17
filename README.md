@@ -71,4 +71,7 @@ eg.`int* pt = new int`
  `arrayname[i]  becomes *(arrayname + i)`  
  2.5  如果结构标识符是结构名，则使用句点运算符；如果标识符是指向结构的指针，则使用箭头标识符。  
 3. 反思算例/snes/ex28.c  
-
+程序中最初定义了一个指向结构体UserCtx的指针`typedef struct _UserCtx* User`  
+这里定义了一个指向结构体的指针类型，这个类型之后在主函数中声明  
+`User user`这里的user是一个指针（地址），这个指针指向结构体_UserCtx  
+指针定义了，但是需要对这个指针初始化，使它指向一个实际的结构体 ** allocate space for struct **  

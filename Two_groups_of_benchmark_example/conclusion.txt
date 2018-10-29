@@ -1,0 +1,14 @@
+1.test8是用slepc算出的中子通量结果，经过matlab数据处理之后，生成wu-readtwogroups二进制文件供给petsc程序读取。
+2.ex213.c是基于SNES对象的Petsc程序，程序输出结果在wu_testtwogroups。
+3.godwu是对输出结果的图像处理程序。
+
+
+结果对比：SLEPC    keff = 1.185464
+                 PETSc   keff = 1.17244
+差异原因：边界条件的设置不一样，Petsc中设置的是最外圈网格为0通量，与Slepc中不同
+Petsc程序代码：
+$PETSC_DIR/lib/petsc/bin/petscmpiexec -n 1 ./ex213 -f wu-readtwogroups -snes_fd -pc_type lu  -snes_view -snes_converged_reason 
+-snes_monitor -ksp_converged_reason -ksp_monitor_true_residual
+
+Slepc程序代码：
+mpiexec -n 1 ./ex72 -eps_type power

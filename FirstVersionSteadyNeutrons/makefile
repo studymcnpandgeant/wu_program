@@ -1,0 +1,26 @@
+#
+#  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#  SLEPc - Scalable Library for Eigenvalue Problem Computations
+#  Copyright (c) 2002-2018, Universitat Politecnica de Valencia, Spain
+#
+#  This file is part of SLEPc.
+#  SLEPc is distributed under a 2-clause BSD license (see LICENSE).
+#  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+#
+
+CFLAGS     =
+FFLAGS     =
+CPPFLAGS   =
+FPPFLAGS   =
+LOCDIR     = src/eps/examples/tutorials/
+EXAMPLESC  = ex1.c ex2.c ex3.c ex4.c ex5.c ex7.c ex71.c ex72.c ex9.c ex10.c ex11.c ex12.c ex13.c \
+             ex18.c ex19.c ex24.c ex25.c ex29.c ex30.c ex31.c ex34.c ex35.c ex36.c ex73.c ex74.c ex75.c ex77.c ex76.c ex78.c ex79.c ex80.cpp Grid.cpp
+EXAMPLESF  = ex1f.F ex1f90.F90 ex6f90.F90
+MANSEC     = EPS
+
+include ${SLEPC_DIR}/lib/slepc/conf/slepc_common
+
+myprogram: ex80.o Grid.o chkopts
+	${CLINKER} -o myprogram ex80.o Grid.o ${SLEPC_EPS_LIB}
+	${RM} -f ex80.o Grid.o
+

@@ -1,0 +1,27 @@
+[0]PETSC ERROR: --------------------- Error Message --------------------------------------------------------------
+[0]PETSC ERROR: Argument out of range
+[0]PETSC ERROR: Column too large: col 1077215232 max 960
+[0]PETSC ERROR: See http://www.mcs.anl.gov/petsc/documentation/faq.html for trouble shooting.
+[0]PETSC ERROR: Petsc Release Version 3.10.1, Sep, 26, 2018 
+[0]PETSC ERROR: ./ex217 on a arch-linux2-c-debug named yjwu-XPS-8910 by yjwu Wed Nov  7 09:52:22 2018
+[0]PETSC ERROR: Configure options --with-cc=gcc --with-cxx=g++ --with-fc=gfortran --download-mpich --download-fblaslapack
+[0]PETSC ERROR: #1 MatSetValues_SeqAIJ() line 442 in /home/yjwu/petsc-3.10.1/src/mat/impls/aij/seq/aij.c
+[0]PETSC ERROR: #2 MatSetValues() line 1349 in /home/yjwu/petsc-3.10.1/src/mat/interface/matrix.c
+[0]PETSC ERROR: #3 FormJacobian() line 272 in /home/yjwu/petsc-3.10.1/src/snes/examples/tutorials/ex217.c
+[0]PETSC ERROR: #4 SNESComputeJacobian() line 2555 in /home/yjwu/petsc-3.10.1/src/snes/interface/snes.c
+[0]PETSC ERROR: #5 SNESSolve_NEWTONLS() line 222 in /home/yjwu/petsc-3.10.1/src/snes/impls/ls/ls.c
+[0]PETSC ERROR: #6 SNESSolve() line 4396 in /home/yjwu/petsc-3.10.1/src/snes/interface/snes.c
+[0]PETSC ERROR: #7 main() line 108 in /home/yjwu/petsc-3.10.1/src/snes/examples/tutorials/ex217.c
+[0]PETSC ERROR: PETSc Option Table entries:
+[0]PETSC ERROR: -f wu-readtwogroups
+[0]PETSC ERROR: -ksp_converged_reason
+[0]PETSC ERROR: -ksp_monitor_true_residual
+[0]PETSC ERROR: -ksp_rtol 1.0e-2
+[0]PETSC ERROR: -snes_converged_reason
+[0]PETSC ERROR: -snes_max_funcs 100000000
+[0]PETSC ERROR: -snes_mf_operator
+[0]PETSC ERROR: -snes_monitor
+[0]PETSC ERROR: -snes_view
+[0]PETSC ERROR: ----------------End of Error Message -------send entire error message to petsc-maint@mcs.anl.gov----------
+application called MPI_Abort(MPI_COMM_WORLD, 63) - process 0
+

@@ -1,0 +1,2 @@
+mpiexec -n 1 ./ex217 -f wu-readtwogroups -snes_mf_operator -snes_view -snes_converged_reason -snes_monitor -ksp_converged_reason -ksp_monitor_true_residual -snes_max_funcs 100000000 -ksp_rtol 1.0e-2
+

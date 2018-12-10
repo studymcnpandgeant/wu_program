@@ -1,0 +1,2 @@
+args:mpiexec -n 1 ./mpcp -f wu-fluxini -snes_mf_operator -snes_view -snes_converged_reason -snes_monitor -ksp_monitor
+

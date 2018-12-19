@@ -1,0 +1,2 @@
+args:mpiexec -n 1 ./mpcpth -snes_fd -pc_type lu -snes_view -snes_converged_reason -snes_monitor -ksp_converged_reason -snes_max_funcs 100000000000
+

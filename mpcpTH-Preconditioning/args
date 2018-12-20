@@ -1,0 +1,2 @@
+args: mpiexec -n 1 ./mpcpth -snes_mf_operator -snes_view -snes_converged_reason -snes_monitor -ksp_converged_reason -ksp_monitor -pc_factor_levels 2 -ksp_rtol 0.4 -snes_max_funcs 100000000000 -snes_rtol 1e-5
+

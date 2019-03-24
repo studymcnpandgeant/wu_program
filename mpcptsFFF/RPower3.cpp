@@ -141,8 +141,8 @@ void RPower3::setinitial(PetscScalar *array1,PetscScalar *array2,PetscScalar *ar
     v[1] = 5.7e7;
     v[2] = 4.8e6;
     v[3] = 4.3e5;
-    keff = 0.999883;
-	dt = 0.1;//very important variable 
+    keff = 0.999884;
+	dt = 1.e-4;//very important variable 
     beta[0]=4.9588439e-4;
 	beta[1]=3.0678140e-3;
 	beta[2]=2.6332880e-3;

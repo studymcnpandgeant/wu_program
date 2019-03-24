@@ -776,7 +776,7 @@ void TH3::setCurrentVariables(const PetscScalar *u)
     Interval2 = 3344;
     Interval3 = 5016;
     Interval4 = 6688;
-    ith       = 18721;
+    ith       = 18720;
 
 
     for (i = 0; i < 1672; i++)

@@ -62,7 +62,7 @@ int main(int argc,char **argv)
 
 
   ierr = PetscInitialize(&argc,&argv,(char*)0,help);if (ierr) return ierr;
-  dt = 0.1;
+  dt = 1.e-4;
 
   /* Reading vectors in binary format */
   /* Read four vectors in binary format */
@@ -178,7 +178,8 @@ int main(int argc,char **argv)
 
   /*Read the file and store them in the matrix*/
   ierr = PetscPrintf(PETSC_COMM_WORLD,"reading THini vector in binary from vector.dat ...\n \n");CHKERRQ(ierr);
-  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-THini1",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
+  //ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-THini1",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
+  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-TH-PTfUV",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
   ierr = VecCreate(PETSC_COMM_WORLD,&u21);CHKERRQ(ierr);
   ierr = VecCreate(PETSC_COMM_WORLD,&u22);CHKERRQ(ierr);
   //ierr = VecCreate(PETSC_COMM_WORLD,&u23);CHKERRQ(ierr);
@@ -198,7 +199,8 @@ int main(int argc,char **argv)
   ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
 
   ierr = PetscPrintf(PETSC_COMM_WORLD,"reading THTsbig vector in binary from vector.dat ...\n \n");CHKERRQ(ierr);
-  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-THini2",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
+  //ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-THini2",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
+  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu-TH-Ts",FILE_MODE_READ,&viewer);CHKERRQ(ierr);
   ierr = VecCreate(PETSC_COMM_WORLD,&u27);CHKERRQ(ierr);
   ierr = VecLoad(u27,viewer);CHKERRQ(ierr);
   ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
@@ -222,8 +224,7 @@ int main(int argc,char **argv)
   ierr = VecSetFromOptions(U);CHKERRQ(ierr);
   ierr = VecDuplicate(U,&FU);CHKERRQ(ierr);
 
-  /* Form initial Guess first 4 neutron field, last 5 thermal field */
-  ierr = FormInitialGuess(U,iniphi1,iniphi2,iniphi3,iniphi4,u21,u22,u27,u24,u25,&user);CHKERRQ(ierr);
+  
 
   /* create nonlinear solver */
   ierr = TSCreate(PETSC_COMM_WORLD,&ts);CHKERRQ(ierr);
@@ -240,6 +241,9 @@ int main(int argc,char **argv)
   ierr = TSMonitorSet(ts,Monitor,&user,NULL);CHKERRQ(ierr);
   ierr = TSSetIJacobian(ts,B,B,FormIJacobian,&user);CHKERRQ(ierr);
   user.oshift = PETSC_MIN_REAL;
+
+  /* Form initial Guess first 4 neutron field, last 5 thermal field */
+  ierr = FormInitialGuess(U,iniphi1,iniphi2,iniphi3,iniphi4,u21,u22,u27,u24,u25,&user);CHKERRQ(ierr);
 
   ierr = TSSetType(ts,TSBEULER);CHKERRQ(ierr);
 
@@ -259,7 +263,7 @@ int main(int argc,char **argv)
   ierr = TSGetStepNumber(ts,&its);CHKERRQ(ierr);
 
   /* Output the data */
-  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu_mpcpFFF_0320_noadd",FILE_MODE_WRITE,&viewer);CHKERRQ(ierr);
+  ierr = PetscViewerBinaryOpen(PETSC_COMM_WORLD,"wu_mpcptsFFF_0324_2",FILE_MODE_WRITE,&viewer);CHKERRQ(ierr);
   ierr = PetscViewerPushFormat(viewer,PETSC_VIEWER_BINARY_MATLAB);CHKERRQ(ierr);
   ierr = VecView(U,viewer);CHKERRQ(ierr);
   ierr = PetscViewerDestroy(&viewer);CHKERRQ(ierr);
@@ -324,7 +328,7 @@ PetscErrorCode FormInitialGuess(Vec U,Vec iniphi1,Vec iniphi2,Vec iniphi3,Vec in
 {
   THRP3          *user = (THRP3*)dummy;
   PetscErrorCode ierr;
-  PetscScalar    *u;
+  PetscScalar    *u,*Ts;
   PetscInt       start,end,Interval1,Interval2,Interval3;
   PetscInt       THInterval1,THInterval2,THInterval3,THInterval4;
   PetscInt       Ilast,i,j,II,n;
@@ -375,7 +379,7 @@ PetscErrorCode FormInitialGuess(Vec U,Vec iniphi1,Vec iniphi2,Vec iniphi3,Vec in
   }
 
 
-  user->keff = initial_phi4[4680];
+  user->keff = 0.999884;
 
   for (j=1; j<76+1; j++){
     for (i=1; i<22+1; i++){
@@ -394,6 +398,13 @@ PetscErrorCode FormInitialGuess(Vec U,Vec iniphi1,Vec iniphi2,Vec iniphi3,Vec in
         u[II+THInterval4 + 18720] =  initial_THTs[II];    
     }
   }
+
+  PetscMalloc1(Interval1,&Ts);
+  for (i = 0; i < Interval1; i++)
+  {
+    Ts[i] = 0.0;
+  }
+  user->updateVoidCrossSection(Ts);
 
 
   ierr = VecRestoreArray(U,&u);CHKERRQ(ierr);
@@ -456,14 +467,14 @@ PetscErrorCode FormIFunction(TS ts,PetscReal t,Vec u,Vec udot,Vec FU,void *dummy
   /* abstract RP and TH variables */
   //user->vecGetTHRPArray(u);
   /*abstract Ts */
-  PetscMalloc1(Interval1,&Ts);
-  for (i = 0; i < Interval1; i++)
-  {
-    Ts[i] = 0.0;
-  }
+  //PetscMalloc1(Interval1,&Ts);
+  //for (i = 0; i < Interval1; i++)
+  //{
+  //  Ts[i] = 0.0;
+  //}
 
 
-  user->updateVoidCrossSection(Ts);
+  //user->updateVoidCrossSection(Ts);
 
 
   /* Compute c and Qfth */
@@ -757,12 +768,12 @@ PetscErrorCode FormIJacobian(TS ts,PetscReal t,Vec u,Vec udot,PetscReal s,Mat J,
 
   /* abstract RP and TH variables */
   //user->vecGetTHRPArray(u);
-  PetscMalloc1(Interval1,&Ts);
-  for (i = 0; i < Interval1; i++)
-  {
-    Ts[i] = 0.0;
-  }
-  user->updateVoidCrossSection(Ts);
+  //PetscMalloc1(Interval1,&Ts);
+  //for (i = 0; i < Interval1; i++)
+  //{
+  //  Ts[i] = 0.0;
+  //}
+  //user->updateVoidCrossSection(Ts);
 
   /* write the current variables */
   user->setCurrentVariables(arrayu);
@@ -986,10 +997,10 @@ PetscErrorCode Monitor(TS ts,PetscInt step,PetscReal time,Vec u,void *dummy)
   n     = 45;
 
 
-  if (time == 0.1)
-  {
-    user->perturbation(time);
-  }
+  //if (time == 0.1)
+  //{
+  //  user->perturbation(time);
+  //}
 
 
 
